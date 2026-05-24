@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Engineering Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #020d18;
+    --panel: #040f1e;
+    --border: #0a2a45;
+    --cyan: #00d4ff;
+    --green: #00ff88;
+    --orange: #ff6b35;
+    --yellow: #ffd700;
+    --purple: #a855f7;
+    --text: #c8e0f0;
+    --dim: #4a6a80;
+    --glow-cyan: 0 0 20px rgba(0,212,255,0.4);
+    --glow-green: 0 0 20px rgba(0,255,136,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,100,180,0.15) 0%, transparent 70%),
+      linear-gradient(180deg, #020d18 0%, #020810 100%);
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    text-shadow: 0 0 40px rgba(0,212,255,0.5), 0 0 80px rgba(0,212,255,0.2);
+    letter-spacing: 2px;
+  }
+
+  h1 span { color: var(--cyan); }
+
+  .header-sub {
+    font-size: 16px;
+    color: var(--dim);
+    margin-top: 16px;
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+
+  /* Phase divider */
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 48px 0 24px;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .phase-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .phase-tag {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .phase-tag.beginner  { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+  .phase-tag.intermediate { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
+  .phase-tag.advanced  { background: rgba(255,107,53,0.1); color: var(--orange); border: 1px solid rgba(255,107,53,0.3); }
+  .phase-tag.expert    { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.3); }
+
+  /* Grid layouts */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .grid-1 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+  /* Cards */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .card.c-green::before  { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+  .card.c-cyan::before   { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+  .card.c-orange::before { background: linear-gradient(90deg, transparent, var(--orange), transparent); }
+  .card.c-yellow::before { background: linear-gradient(90deg, transparent, var(--yellow), transparent); }
+  .card.c-purple::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0,212,255,0.3);
+    box-shadow: var(--glow-cyan);
+  }
+
+  .card.c-green:hover  { border-color: rgba(0,255,136,0.3); box-shadow: var(--glow-green); }
+  .card.c-orange:hover { border-color: rgba(255,107,53,0.3); box-shadow: 0 0 20px rgba(255,107,53,0.3); }
+  .card.c-purple:hover { border-color: rgba(168,85,247,0.3); box-shadow: 0 0 20px rgba(168,85,247,0.3); }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .card.c-green  .card-title { color: var(--green); }
+  .card.c-cyan   .card-title { color: var(--cyan); }
+  .card.c-orange .card-title { color: var(--orange); }
+  .card.c-yellow .card-title { color: var(--yellow); }
+  .card.c-purple .card-title { color: var(--purple); }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: 16px;
+    line-height: 1.5;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* Topic list */
+  .topics { list-style: none; }
+  .topics li {
+    font-size: 14px;
+    color: var(--text);
+    padding: 5px 0;
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.4;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-weight: 500;
+  }
+  .topics li:last-child { border-bottom: none; }
+  .topics li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    font-size: 10px;
+    top: 7px;
+  }
+
+  .card.c-green  .topics li::before { color: var(--green); }
+  .card.c-cyan   .topics li::before { color: var(--cyan); }
+  .card.c-orange .topics li::before { color: var(--orange); }
+  .card.c-yellow .topics li::before { color: var(--yellow); }
+  .card.c-purple .topics li::before { color: var(--purple); }
+
+  /* Cert badge */
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 0;
+  }
+
+  .cert {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.3s;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .cert:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,215,0,0.4);
+    box-shadow: 0 0 16px rgba(255,215,0,0.2);
+  }
+
+  .cert-vendor {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .cert-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 4px;
+  }
+
+  .cert-level {
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .cert-level.entry   { color: var(--green); }
+  .cert-level.assoc   { color: var(--cyan); }
+  .cert-level.prof    { color: var(--orange); }
+  .cert-level.expert  { color: var(--purple); }
+
+  /* Skills bar */
+  .skill-item {
+    margin-bottom: 12px;
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  .skill-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .skill-fill {
+    height: 100%;
+    border-radius: 2px;
+    animation: fillBar 1.2s ease both;
+    transform-origin: left;
+  }
+
+  @keyframes fillBar {
+    from { width: 0 !important; }
+  }
+
+  /* Timeline connector */
+  .timeline-connector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0;
+    gap: 8px;
+    opacity: 0.4;
+  }
+
+  .timeline-connector .line {
+    width: 60px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .timeline-connector .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s ease infinite;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .stat-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--cyan);
+    display: block;
+    text-shadow: var(--glow-cyan);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Share Tech Mono', monospace;
+    margin-top: 4px;
+  }
+
+  /* Animations */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: none; } }
+  @keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse    { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* Stagger delays */
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.2s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.3s; }
+
+  /* Section: career paths */
+  .path-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .path-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .path-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0,212,255,0.4);
+    box-shadow: var(--glow-cyan);
+  }
+
+  .path-icon { font-size: 32px; display: block; margin-bottom: 10px; }
+
+  .path-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .path-desc {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  .salary-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 2px;
+  }
+
+  /* Buy Me a Coffee */
+  .coffee-section {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .coffee-card {
+    background: linear-gradient(135deg, #1a0a00 0%, #0d1a0a 100%);
+    border: 1px solid rgba(255, 193, 7, 0.35);
+    border-radius: 8px;
+    padding: 28px 36px;
+    max-width: 540px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 0 40px rgba(255, 180, 0, 0.08), inset 0 1px 0 rgba(255,220,80,0.1);
+    animation: fadeUp 0.7s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .coffee-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffd700, #ffaa00, transparent);
+  }
+
+  .coffee-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .coffee-emoji {
+    font-size: 40px;
+    filter: drop-shadow(0 0 12px rgba(255,180,0,0.6));
+    animation: steamFloat 3s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes steamFloat {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%       { transform: translateY(-6px) rotate(3deg); }
+  }
+
+  .coffee-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffd700;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 16px rgba(255,215,0,0.5);
+  }
+
+  .coffee-sub {
+    font-size: 13px;
+    color: #8a9a80;
+    line-height: 1.5;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .coffee-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #ffcf00 0%, #ff9500 100%);
+    color: #1a0800;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 13px 32px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 4px 20px rgba(255, 180, 0, 0.4);
+    text-transform: uppercase;
+  }
+
+  .coffee-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 30px rgba(255, 180, 0, 0.6);
+    filter: brightness(1.1);
+  }
+
+  .coffee-btn:active { transform: translateY(0) scale(0.98); }
+
+  .coffee-btn-icon { font-size: 18px; }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .cert-grid { grid-template-columns: repeat(2, 1fr); }
+    .coffee-card { padding: 20px; }
+    .coffee-top { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="header-label">// Complete Career Roadmap</div>
+    <h1>NETWORK<br><span>ENGINEERING</span></h1>
+    <p class="header-sub">From Zero to Expert — Structured Learning Path</p>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box"><span class="stat-num">4+</span><div class="stat-label">Career Phases</div></div>
+    <div class="stat-box"><span class="stat-num">20+</span><div class="stat-label">Core Topics</div></div>
+    <div class="stat-box"><span class="stat-num">15+</span><div class="stat-label">Certifications</div></div>
+    <div class="stat-box"><span class="stat-num">$120k+</span><div class="stat-label">Sr. Avg Salary</div></div>
+  </div>
+
+  <!-- ── PHASE 1: BEGINNER ── -->
+  <div class="phase-label"><div class="phase-tag beginner">Phase 01 — Foundation</div></div>
+  <div class="grid-2">
+    <div class="card c-green">
+      <span class="card-icon">🖥️</span>
+      <div class="card-title">Computer & OS Basics</div>
+      <div class="card-desc">// Start here — understand the machines</div>
+      <ul class="topics">
+        <li>How computers work (CPU, RAM, Storage, NIC)</li>
+        <li>Operating systems: Windows, Linux, macOS</li>
+        <li>Linux CLI fundamentals (ls, cd, ping, ifconfig)</li>
+        <li>File systems and permissions</li>
+        <li>Virtualization basics (VirtualBox / VMware)</li>
+        <li>Packet Tracer / GNS3 lab setup</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <span class="card-icon">📡</span>
+      <div class="card-title">Networking Fundamentals</div>
+      <div class="card-desc">// Core concepts every engineer must know</div>
+      <ul class="topics">
+        <li>What is a network? LAN, WAN, MAN, PAN</li>
+        <li>OSI Model — all 7 layers explained</li>
+        <li>TCP/IP Model and comparison with OSI</li>
+        <li>IP addressing: IPv4, IPv6, subnetting (CIDR)</li>
+        <li>MAC addresses, ARP, NDP</li>
+        <li>Ethernet, cables, connectors, topologies</li>
+        <li>Switches, Routers, Hubs, Bridges, Access Points</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <span class="card-icon">🔢</span>
+      <div class="card-title">Subnetting & Addressing</div>
+      <div class="card-desc">// Master binary and IP math</div>
+      <ul class="topics">
+        <li>Binary, decimal, hexadecimal conversions</li>
+        <li>IPv4 classes (A, B, C, D, E)</li>
+        <li>Subnet masks and wildcard masks</li>
+        <li>CIDR notation and VLSM</li>
+        <li>Public vs private IP ranges (RFC 1918)</li>
+        <li>NAT, PAT, DHCP fundamentals</li>
+        <li>IPv6 addressing and types</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <span class="card-icon">🌐</span>
+      <div class="card-title">Core Protocols</div>
+      <div class="card-desc">// How data moves across networks</div>
+      <ul class="topics">
+        <li>DNS — how name resolution works</li>
+        <li>DHCP — dynamic address assignment</li>
+        <li>HTTP, HTTPS, FTP, SFTP, TFTP</li>
+        <li>SMTP, POP3, IMAP — email protocols</li>
+        <li>ICMP — ping, traceroute</li>
+        <li>TCP vs UDP — when to use each</li>
+        <li>Port numbers and well-known services</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── PHASE 2: INTERMEDIATE ── -->
+  <div class="phase-label"><div class="phase-tag intermediate">Phase 02 — Core Skills</div></div>
+  <div class="grid-2">
+    <div class="card c-cyan">
+      <span class="card-icon">🔀</span>
+      <div class="card-title">Switching & VLANs</div>
+      <div class="card-desc">// Layer 2 switching mastery</div>
+      <ul class="topics">
+        <li>How Ethernet switches work (MAC table)</li>
+        <li>VLANs — creating, configuring, inter-VLAN routing</li>
+        <li>Trunking (802.1Q), DTP, native VLAN</li>
+        <li>Spanning Tree Protocol (STP, RSTP, PVST+)</li>
+        <li>EtherChannel / LACP / PAgP</li>
+        <li>Port security and storm control</li>
+        <li>CDP/LLDP neighbor discovery</li>
+      </ul>
+    </div>
+    <div class="card c-cyan">
+      <span class="card-icon">🛣️</span>
+      <div class="card-title">Routing Protocols</div>
+      <div class="card-desc">// Layer 3 routing mastery</div>
+      <ul class="topics">
+        <li>Static routing and default routes</li>
+        <li>RIP v1/v2 — distance vector basics</li>
+        <li>OSPF — link-state, areas, LSAs, SPF</li>
+        <li>EIGRP — hybrid, DUAL algorithm</li>
+        <li>BGP — eBGP, iBGP, path attributes</li>
+        <li>Route redistribution and filtering</li>
+        <li>Administrative distance and metrics</li>
+      </ul>
+    </div>
+    <div class="card c-cyan">
+      <span class="card-icon">🔐</span>
+      <div class="card-title">Network Security Basics</div>
+      <div class="card-desc">// Protect the infrastructure</div>
+      <ul class="topics">
+        <li>Firewalls — stateful vs stateless, ACLs</li>
+        <li>VPN — IPsec, SSL/TLS, site-to-site, remote access</li>
+        <li>AAA — RADIUS, TACACS+ authentication</li>
+        <li>Port security, DHCP snooping, DAI</li>
+        <li>Common attacks: DoS, MITM, ARP spoofing</li>
+        <li>Network segmentation and DMZ</li>
+        <li>Cryptography fundamentals</li>
+      </ul>
+    </div>
+    <div class="card c-cyan">
+      <span class="card-icon">📊</span>
+      <div class="card-title">Network Monitoring & Tools</div>
+      <div class="card-desc">// Visibility and troubleshooting</div>
+      <ul class="topics">
+        <li>Wireshark — packet capture and analysis</li>
+        <li>SNMP — monitoring, MIBs, OIDs, traps</li>
+        <li>Syslog — centralized logging</li>
+        <li>NetFlow / sFlow — traffic analysis</li>
+        <li>NMS tools: PRTG, Zabbix, Nagios</li>
+        <li>Ping, traceroute, nslookup, nmap</li>
+        <li>Network baselining and capacity planning</li>
+      </ul>
+    </div>
+    <div class="card c-cyan">
+      <span class="card-icon">☁️</span>
+      <div class="card-title">WAN Technologies</div>
+      <div class="card-desc">// Connecting remote sites</div>
+      <ul class="topics">
+        <li>MPLS — labels, LDP, LSP, VPN</li>
+        <li>SD-WAN concepts and benefits</li>
+        <li>Metro Ethernet, leased lines</li>
+        <li>PPP, HDLC, Frame Relay (legacy)</li>
+        <li>DMVPN — hub-and-spoke, phase 1/2/3</li>
+        <li>QoS — DSCP, CoS, queuing, shaping</li>
+        <li>Broadband: DSL, cable, fiber</li>
+      </ul>
+    </div>
+    <div class="card c-cyan">
+      <span class="card-icon">⚙️</span>
+      <div class="card-title">Network Automation Intro</div>
+      <div class="card-desc">// Start automating your work</div>
+      <ul class="topics">
+        <li>Python basics for network engineers</li>
+        <li>Netmiko — SSH automation</li>
+        <li>NAPALM — multi-vendor abstraction</li>
+        <li>Ansible for network automation</li>
+        <li>REST APIs and JSON/YAML</li>
+        <li>Git & version control for configs</li>
+        <li>Templating with Jinja2</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── PHASE 3: ADVANCED ── -->
+  <div class="phase-label"><div class="phase-tag advanced">Phase 03 — Advanced Engineering</div></div>
+  <div class="grid-3">
+    <div class="card c-orange">
+      <span class="card-icon">🏗️</span>
+      <div class="card-title">Network Design</div>
+      <ul class="topics">
+        <li>Hierarchical design (Core/Dist/Access)</li>
+        <li>Spine-Leaf architecture</li>
+        <li>High availability & redundancy (HSRP, VRRP, GLBP)</li>
+        <li>Campus, DC, and WAN design</li>
+        <li>Capacity planning & traffic engineering</li>
+        <li>IPv6 migration strategies</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <span class="card-icon">🌩️</span>
+      <div class="card-title">Cloud Networking</div>
+      <ul class="topics">
+        <li>AWS VPC, subnets, route tables, IGW</li>
+        <li>Azure Virtual Networks & VPN Gateway</li>
+        <li>GCP networking fundamentals</li>
+        <li>Cloud interconnects (Direct Connect, ExpressRoute)</li>
+        <li>Transit Gateway, VPC peering</li>
+        <li>Cloud security groups and NACLs</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <span class="card-icon">🔬</span>
+      <div class="card-title">Advanced Security</div>
+      <ul class="topics">
+        <li>Zero Trust Architecture</li>
+        <li>Next-Gen Firewalls (Palo Alto, Fortinet)</li>
+        <li>IDS/IPS and SIEM integration</li>
+        <li>Micro-segmentation</li>
+        <li>PKI and certificate management</li>
+        <li>Penetration testing fundamentals</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <span class="card-icon">🤖</span>
+      <div class="card-title">Advanced Automation</div>
+      <ul class="topics">
+        <li>CI/CD pipelines for network configs</li>
+        <li>Terraform for network infrastructure</li>
+        <li>YANG models and NETCONF/RESTCONF</li>
+        <li>Nornir automation framework</li>
+        <li>Network testing with pytest</li>
+        <li>ChatOps with Slack/Teams bots</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <span class="card-icon">📦</span>
+      <div class="card-title">Data Center Networking</div>
+      <ul class="topics">
+        <li>VXLAN and EVPN overlay networks</li>
+        <li>ACI (Cisco Application Centric Infra)</li>
+        <li>NSX-T (VMware networking)</li>
+        <li>Storage networking (Fibre Channel, iSCSI)</li>
+        <li>Load balancing (F5, Citrix, Nginx)</li>
+        <li>Data center interconnect (DCI)</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <span class="card-icon">📶</span>
+      <div class="card-title">Wireless & Mobility</div>
+      <ul class="topics">
+        <li>802.11 standards (a/b/g/n/ac/ax/be)</li>
+        <li>RF fundamentals, channels, SSID</li>
+        <li>WLC and lightweight AP architecture</li>
+        <li>802.1X and EAP authentication</li>
+        <li>Roaming, QoS for voice/video</li>
+        <li>Wi-Fi 6/6E/7 features</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── PHASE 4: EXPERT ── -->
+  <div class="phase-label"><div class="phase-tag expert">Phase 04 — Expert / Architect</div></div>
+  <div class="grid-2">
+    <div class="card c-purple">
+      <span class="card-icon">🧠</span>
+      <div class="card-title">Network Architecture</div>
+      <div class="card-desc">// Design enterprise-scale networks</div>
+      <ul class="topics">
+        <li>Enterprise architecture frameworks (TOGAF)</li>
+        <li>Multi-cloud and hybrid networking</li>
+        <li>SD-WAN design and deployment</li>
+        <li>SASE (Secure Access Service Edge)</li>
+        <li>5G and edge computing integration</li>
+        <li>Intent-Based Networking (IBN)</li>
+        <li>Network Digital Twin concepts</li>
+      </ul>
+    </div>
+    <div class="card c-purple">
+      <span class="card-icon">⚡</span>
+      <div class="card-title">Service Provider & Telco</div>
+      <div class="card-desc">// ISP-scale infrastructure</div>
+      <ul class="topics">
+        <li>BGP advanced: communities, policies, peering</li>
+        <li>MPLS Traffic Engineering</li>
+        <li>Segment Routing (SR-MPLS, SRv6)</li>
+        <li>EVPN for carrier-grade services</li>
+        <li>Internet exchange points (IXP)</li>
+        <li>DDoS mitigation at scale</li>
+        <li>Network function virtualization (NFV)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── CERTIFICATIONS ── -->
+  <div class="phase-label"><div class="phase-tag beginner">Certifications Roadmap</div></div>
+  <div class="cert-grid">
+    <div class="cert">
+      <div class="cert-vendor">CompTIA</div>
+      <div class="cert-name">Network+</div>
+      <div class="cert-level entry">Entry Level</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Cisco</div>
+      <div class="cert-name">CCNA</div>
+      <div class="cert-level assoc">Associate</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Cisco</div>
+      <div class="cert-name">CCNP Enterprise</div>
+      <div class="cert-level prof">Professional</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Cisco</div>
+      <div class="cert-name">CCIE Enterprise</div>
+      <div class="cert-level expert">Expert</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Juniper</div>
+      <div class="cert-name">JNCIA</div>
+      <div class="cert-level assoc">Associate</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Juniper</div>
+      <div class="cert-name">JNCIP / JNCIE</div>
+      <div class="cert-level prof">Pro / Expert</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">AWS</div>
+      <div class="cert-name">ANS-C01</div>
+      <div class="cert-level prof">Advanced Networking</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Azure</div>
+      <div class="cert-name">AZ-700</div>
+      <div class="cert-level prof">Network Engineer</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Palo Alto</div>
+      <div class="cert-name">PCNSE</div>
+      <div class="cert-level prof">Security Expert</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Fortinet</div>
+      <div class="cert-name">NSE 4/7/8</div>
+      <div class="cert-level prof">Security</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">CompTIA</div>
+      <div class="cert-name">Security+</div>
+      <div class="cert-level assoc">Security Baseline</div>
+    </div>
+    <div class="cert">
+      <div class="cert-vendor">Cisco</div>
+      <div class="cert-name">CCNP Security</div>
+      <div class="cert-level prof">Professional</div>
+    </div>
+  </div>
+
+  <!-- ── SKILLS TO BUILD ── -->
+  <div class="phase-label"><div class="phase-tag intermediate">Key Skill Areas</div></div>
+  <div class="grid-2">
+    <div class="card c-cyan">
+      <div class="card-title">Technical Proficiency</div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Routing & Switching</span><span style="color:var(--cyan)">Expert</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:95%;background:var(--cyan)"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Network Security</span><span style="color:var(--orange)">Advanced</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%;background:var(--orange)"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Cloud Networking</span><span style="color:var(--green)">Proficient</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%;background:var(--green)"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Automation / Python</span><span style="color:var(--purple)">Strong</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%;background:var(--purple)"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Wireless / RF</span><span style="color:var(--yellow)">Intermediate</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:60%;background:var(--yellow)"></div></div>
+      </div>
+    </div>
+    <div class="card c-cyan">
+      <div class="card-title">Soft & Business Skills</div>
+      <ul class="topics">
+        <li>Troubleshooting methodology (OSI-layer approach)</li>
+        <li>Documentation (Visio, draw.io, Confluence)</li>
+        <li>Change management and ITIL processes</li>
+        <li>Project management (Agile/Scrum basics)</li>
+        <li>Vendor communication and negotiation</li>
+        <li>On-call incident response and RCA</li>
+        <li>Presenting designs to business stakeholders</li>
+        <li>Mentoring junior engineers</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── CAREER PATHS ── -->
+  <div class="phase-label"><div class="phase-tag expert">Career Paths</div></div>
+  <div class="path-row">
+    <div class="path-card">
+      <span class="path-icon">🏢</span>
+      <div class="path-title">Enterprise Network Eng.</div>
+      <div class="path-desc">Design & manage corporate LAN/WAN, campus networks</div>
+      <div class="salary-badge">$85k–$140k</div>
+    </div>
+    <div class="path-card">
+      <span class="path-icon">🌐</span>
+      <div class="path-title">ISP / Telco Engineer</div>
+      <div class="path-desc">Build carrier-grade infrastructure, BGP, MPLS at scale</div>
+      <div class="salary-badge">$90k–$160k</div>
+    </div>
+    <div class="path-card">
+      <span class="path-icon">☁️</span>
+      <div class="path-title">Cloud Network Architect</div>
+      <div class="path-desc">Design multi-cloud networking, SDN, hybrid connectivity</div>
+      <div class="salary-badge">$120k–$200k</div>
+    </div>
+    <div class="path-card">
+      <span class="path-icon">🔐</span>
+      <div class="path-title">Network Security Eng.</div>
+      <div class="path-desc">Firewalls, SASE, Zero Trust, threat mitigation</div>
+      <div class="salary-badge">$100k–$180k</div>
+    </div>
+    <div class="path-card">
+      <span class="path-icon">🤖</span>
+      <div class="path-title">NetDevOps Engineer</div>
+      <div class="path-desc">Automate networks with Python, Ansible, CI/CD pipelines</div>
+      <div class="salary-badge">$110k–$180k</div>
+    </div>
+    <div class="path-card">
+      <span class="path-icon">🏛️</span>
+      <div class="path-title">Network Architect</div>
+      <div class="path-desc">Lead enterprise-wide design, strategy, and standards</div>
+      <div class="salary-badge">$150k–$250k+</div>
+    </div>
+  </div>
+
+  <!-- ── LEARNING RESOURCES ── -->
+  <div class="phase-label"><div class="phase-tag beginner">Recommended Resources</div></div>
+  <div class="grid-3">
+    <div class="card c-green">
+      <span class="card-icon">📚</span>
+      <div class="card-title">Books</div>
+      <ul class="topics">
+        <li>Computer Networking: Top-Down Approach — Kurose & Ross</li>
+        <li>CCNA Official Cert Guide — Odom</li>
+        <li>TCP/IP Illustrated — Stevens</li>
+        <li>Network Warrior — Donohue</li>
+        <li>The Practice of Network Security — Cheswick</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <span class="card-icon">🎓</span>
+      <div class="card-title">Online Platforms</div>
+      <ul class="topics">
+        <li>CBT Nuggets — video training</li>
+        <li>INE.com — Cisco/network labs</li>
+        <li>Udemy — affordable courses</li>
+        <li>Cisco NetAcad — free CCNA prep</li>
+        <li>NetworkChuck — YouTube channel</li>
+        <li>David Bombal — YouTube / labs</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <span class="card-icon">🧪</span>
+      <div class="card-title">Lab Tools</div>
+      <ul class="topics">
+        <li>Cisco Packet Tracer — free simulator</li>
+        <li>GNS3 — real IOS emulation</li>
+        <li>EVE-NG — professional lab platform</li>
+        <li>CML (Cisco Modeling Labs)</li>
+        <li>Kathará / Containerlab — container labs</li>
+        <li>AWS Free Tier — cloud practice</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Buy Me a Coffee -->
+  <div class="coffee-section">
+    <div class="coffee-card">
+      <div class="coffee-top">
+        <span class="coffee-emoji">☕</span>
+        <div>
+          <div class="coffee-title">Found this roadmap helpful?</div>
+          <div class="coffee-sub">Support the work — buy me a coffee and keep the content coming.</div>
+        </div>
+      </div>
+      <a href="https://buymeacoffee.com" target="_blank" rel="noopener" class="coffee-btn">
+        <span class="coffee-btn-icon">☕</span>
+        Buy Me a Coffee
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    ◈ NETWORK ENGINEERING ROADMAP ◈ BUILD. CONNECT. SECURE. AUTOMATE. ◈
+  </footer>
+
+</div>
+</body>
+</html>
